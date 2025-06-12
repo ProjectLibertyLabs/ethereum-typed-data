@@ -1,2 +1,4 @@
-# ethereum-typed-data
-Demonstration of signing / verifying typed structured data (EIP-712) messages signed with SECP256K1 keys
+# Ethereum Typed Data Example Code
+
+A minimal example showing how to sign & verifying signatures following EIP-712 standard from Ethereum using the
+`web3j` library.
