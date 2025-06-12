@@ -1,5 +1,5 @@
 import java.io.IOException;
 
-public sealed interface SignablePayload permits AddProviderPayload {
+public interface SignablePayload {
   byte[] encode() throws IOException;
 }
