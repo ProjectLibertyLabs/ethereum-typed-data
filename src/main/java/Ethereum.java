@@ -21,8 +21,8 @@ public class Ethereum {
   public static byte[] signTypedData(SignablePayload payload, byte[] privateKey) throws IOException {
     // Transforms the payload object into EIP-712 JSON, then serializes and hashes the payload
     final var encodedPayload = payload.encode();
-    // Signs the message directly since the message is already a hash
-    var signatureData = Sign.signMessage(encodedPayload, ECKeyPair.create(privateKey), false);
+    // Signs the message directly--the prior encoding step handles the hashing
+    final var signatureData = Sign.signMessage(encodedPayload, ECKeyPair.create(privateKey), false);
 
     return serializeSignatureData(signatureData);
   }
@@ -33,18 +33,18 @@ public class Ethereum {
    */
   public static boolean verifyTypedDataSignature(byte[] signature, SignablePayload payload, byte[] publicKey) throws IOException, SignatureException {
     // Converts to BigInteger to compare against the BigInteger key found by web3j
-    var providedPublicKey = coercePublicKeyBytesToScalar(publicKey);
+    final var providedPublicKey = coercePublicKeyBytesToScalar(publicKey);
 
     // Reshapes signature to match web3j
-    var signatureData = Sign.signatureDataFromHex(toHex(signature));
+    final var signatureData = Sign.signatureDataFromHex(toHex(signature));
     // Identifies the public key used to sign the message
-    var signingKey = Sign.signedMessageHashToKey(payload.encode(), signatureData);
+    final var signingKey = Sign.signedMessageHashToKey(payload.encode(), signatureData);
 
     return providedPublicKey.equals(signingKey);
   }
 
   public static byte[] eip712Encode(String jsonData) throws IOException {
-    StructuredDataEncoder dataEncoder = new StructuredDataEncoder(jsonData);
+    final var dataEncoder = new StructuredDataEncoder(jsonData);
     return dataEncoder.hashStructuredData();
   }
 
@@ -66,7 +66,7 @@ public class Ethereum {
    * signature.
    */
   private static byte[] serializeSignatureData(Sign.SignatureData data) {
-    var signatureBuffer = ByteBuffer.allocate(65);
+    final var signatureBuffer = ByteBuffer.allocate(65);
 
     // Concatenates the signature data byte arrays into a single one
     signatureBuffer.put(data.getR());
