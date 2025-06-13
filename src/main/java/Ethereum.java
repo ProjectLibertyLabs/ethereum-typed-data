@@ -14,6 +14,10 @@ import org.web3j.crypto.StructuredDataEncoder;
  * */
 public class Ethereum {
 
+  /**
+   * Transforms the payload object into EIP-712 JSON, then serializes and hashes the payload to create a message.
+   * Signs the message directly--skipping hashing because the message is already hashed.
+   */
   public static byte[] signTypedData(SignablePayload payload, byte[] privateKey) throws IOException {
     // Transforms the payload object into EIP-712 JSON, then serializes and hashes the payload
     final var encodedPayload = payload.encode();
@@ -23,6 +27,10 @@ public class Ethereum {
     return serializeSignatureData(signatureData);
   }
 
+  /**
+   * Serializes the payload and identifies the public key used to sign over that message, then compares
+   * against the provided public key.
+   */
   public static boolean verifyTypedDataSignature(byte[] signature, SignablePayload payload, byte[] publicKey) throws IOException, SignatureException {
     // Converts to BigInteger to compare against the BigInteger key found by web3j
     var providedPublicKey = coercePublicKeyBytesToScalar(publicKey);
